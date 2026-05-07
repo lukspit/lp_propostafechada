@@ -686,6 +686,70 @@
     }
 
     /* =========================================================
+       HEADER
+    ========================================================= */
+    .site-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .header-logo {
+      height: 34px;
+      width: auto;
+      display: block;
+    }
+
+    .header-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--charcoal);
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+    }
+
+    .header-cta {
+      display: none;
+      background: var(--gold);
+      color: var(--charcoal);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 20px;
+      border-radius: 4px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.18s ease;
+      flex-shrink: 0;
+    }
+
+    .header-cta:hover { background: var(--gold-light); }
+
+    @media (min-width: 480px) { .header-cta { display: inline-block; } }
+
+    /* =========================================================
        FOOTER
     ========================================================= */
     .site-footer {
@@ -746,6 +810,19 @@
   </style>
 </head>
 <body>
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#" class="header-brand">
+      <img src="logo.png" alt="Proposta Fechada" class="header-logo">
+      <span class="header-name">Proposta Fechada</span>
+    </a>
+    <a href="#LINK_HOTMART" class="header-cta">Comprar — R$97</a>
+  </div>
+</header>
 
 <!-- =====================================================
      HERO
@@ -874,7 +951,7 @@
         <div class="step-num">1</div>
         <div class="step-body">
           <h3>Abre o Claude Code na pasta do sistema</h3>
-          <p>Você instala o Claude Code uma vez — é gratuito. Faz o download do sistema, extrai a pasta e abre com um comando. O vídeo de instalação mostra tudo em menos de 10 minutos.</p>
+          <p>Você faz o download do sistema, extrai a pasta e abre no Claude Code com um comando. O vídeo de instalação mostra tudo em menos de 10 minutos.</p>
         </div>
       </div>
 
@@ -890,7 +967,7 @@
         <div class="step-num">3</div>
         <div class="step-body">
           <h3>O sistema gera, você envia</h3>
-          <p>A proposta abre sozinha no navegador. Você revisa, aprova, e envia o arquivo pelo WhatsApp — ou publica como link no GitHub Pages em segundos, de graça. O cliente abre no celular como um site.</p>
+          <p>A proposta abre sozinha no navegador. Você revisa, aprova, e publica como link no GitHub Pages em segundos — de graça. O cliente recebe o link e abre no celular como um site.</p>
         </div>
       </div>
 
@@ -1103,7 +1180,7 @@
           </svg>
         </button>
         <div class="faq-a">
-          <p>O Claude Code é gratuito. Para usá-lo você precisa de uma conta no Claude — o plano Pro custa $20/mês. Se você já usa Claude, não tem custo extra. O sistema em si é comprado uma vez só.</p>
+          <p>Para usar o Claude Code você precisa de uma conta no Claude — o plano Pro custa $20/mês. Se você já usa Claude, não tem custo extra. O sistema em si é comprado uma vez só.</p>
         </div>
       </div>
 
