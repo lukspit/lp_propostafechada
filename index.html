@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposta Fechada — Sistema Claude Code para Propostas Comerciais</title>
+  <meta name="description" content="Um sistema completo para o Claude Code gerar propostas comerciais em HTML — com design de agência, copy persuasiva e identidade do seu negócio.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       RESET + VARIÁVEIS
+    ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --charcoal: #111111;
+      --gold: #C9A84C;
+      --gold-light: #DDB95E;
+      --off-white: #F9F7F4;
+      --white: #FFFFFF;
+      --text: #111111;
+      --text-mid: #444444;
+      --text-light: #888888;
+      --border: #E6E2DC;
+      --max-w: 900px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.7;
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      line-height: 1.15;
+    }
+
+    /* =========================================================
+       ANIMAÇÕES
+    ========================================================= */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.08s; }
+    .d2 { transition-delay: 0.16s; }
+    .d3 { transition-delay: 0.24s; }
+    .d4 { transition-delay: 0.32s; }
+    .d5 { transition-delay: 0.40s; }
+
+    /* =========================================================
+       HERO — dark
+    ========================================================= */
+    .hero {
+      background: var(--charcoal);
+      padding: 72px 0 80px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -160px;
+      left: -100px;
+      width: 480px;
+      height: 480px;
+      background: var(--gold);
+      opacity: 0.04;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+
+    .hero-text {
+      animation: fadeInUp 0.75s ease forwards;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 22px;
+    }
+
+    .hero h1 {
+      font-size: 40px;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 22px;
+      max-width: 580px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.68);
+      max-width: 500px;
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    .btn {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--charcoal);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 18px 36px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.18s ease, transform 0.15s ease;
+    }
+
+    .btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+
+    .btn-lg {
+      font-size: 17px;
+      padding: 20px 44px;
+    }
+
+    .btn-block {
+      display: block;
+      text-align: center;
+      width: 100%;
+    }
+
+    .hero-hint {
+      display: block;
+      font-size: 13px;
+      color: rgba(255,255,255,0.38);
+      margin-top: 14px;
+    }
+
+    /* VIDEO */
+    .video-wrap {
+      animation: fadeInUp 0.75s ease 0.18s both;
+      width: 100%;
+    }
+
+    .video-box {
+      width: 100%;
+      max-width: 290px;
+      margin: 0 auto;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 28px 72px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.2);
+    }
+
+    .video-ratio {
+      position: relative;
+      width: 100%;
+      padding-top: 177.78%; /* 9:16 */
+    }
+
+    #yt-player {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.22);
+      cursor: pointer;
+      transition: background 0.2s;
+      z-index: 3;
+    }
+
+    .video-overlay.playing { opacity: 0; pointer-events: none; }
+
+    .play-circle {
+      width: 60px;
+      height: 60px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+
+    .video-overlay:hover .play-circle { transform: scale(1.1); }
+
+    .progress-track {
+      height: 3px;
+      background: rgba(255,255,255,0.1);
+      cursor: pointer;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--gold);
+      transition: width 0.45s linear;
+    }
+
+    /* =========================================================
+       SEÇÃO — base
+    ========================================================= */
+    section { padding: 80px 0; }
+
+    .label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    /* =========================================================
+       PROBLEMA — off-white
+    ========================================================= */
+    .problem { background: var(--off-white); }
+
+    .problem h2 {
+      font-size: 34px;
+      font-weight: 900;
+      margin-bottom: 40px;
+      max-width: 580px;
+    }
+
+    .pain-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .pain {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .pain-icon {
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      margin-top: 3px;
+      color: var(--gold);
+    }
+
+    .pain p { font-size: 17px; color: var(--text-mid); line-height: 1.7; }
+    .pain strong { color: var(--text); }
+
+    .callout {
+      margin-top: 48px;
+      padding: 28px 32px;
+      border-left: 3px solid var(--gold);
+      background: var(--white);
+      border-radius: 0 6px 6px 0;
+      box-shadow: 0 2px 24px rgba(0,0,0,0.05);
+    }
+
+    .callout p {
+      font-size: 18px;
+      line-height: 1.65;
+      color: var(--text);
+    }
+
+    /* =========================================================
+       TRANSFORMAÇÃO — white
+    ========================================================= */
+    .transformation { background: var(--white); }
+
+    .transformation h2 {
+      font-size: 34px;
+      font-weight: 900;
+      margin-bottom: 40px;
+      max-width: 580px;
+    }
+
+    .tcard-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tcard {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tcard::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px;
+      height: 100%;
+      background: var(--gold);
+    }
+
+    .tcard h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .tcard p { font-size: 15px; color: #555; line-height: 1.65; }
+
+    /* =========================================================
+       COMO FUNCIONA — dark
+    ========================================================= */
+    .how { background: var(--charcoal); }
+
+    .how .label { opacity: 0.75; }
+
+    .how h2 {
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 56px;
+      max-width: 540px;
+    }
+
+    .steps { display: flex; flex-direction: column; }
+
+    .step {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      padding: 0 0 36px;
+    }
+
+    .step:not(:last-child) {
+      border-left: 1px solid rgba(201,168,76,0.2);
+      margin-left: 26px;
+      padding-left: 32px;
+      position: relative;
+    }
+
+    .step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -1px;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(201,168,76,0.35), rgba(201,168,76,0));
+    }
+
+    .step-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 44px;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      flex-shrink: 0;
+      width: 48px;
+      position: relative;
+    }
+
+    .step:not(:last-child) .step-num {
+      margin-left: -56px;
+    }
+
+    .step-body { padding-top: 4px; }
+
+    .step-body h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .step-body p {
+      font-size: 15px;
+      color: rgba(255,255,255,0.62);
+      line-height: 1.7;
+    }
+
+    /* =========================================================
+       INCLUI — white
+    ========================================================= */
+    .includes { background: var(--white); }
+
+    .includes h2 {
+      font-size: 34px;
+      font-weight: 900;
+      margin-bottom: 40px;
+    }
+
+    .include-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .inc {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 22px 24px;
+      background: var(--off-white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .inc-icon { flex-shrink: 0; color: var(--gold); margin-top: 2px; }
+
+    .inc-text h4 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .inc-text p { font-size: 14px; color: #666; line-height: 1.6; }
+
+    /* =========================================================
+       PARA QUEM — off-white
+    ========================================================= */
+    .for-who { background: var(--off-white); }
+
+    .for-who h2 {
+      font-size: 34px;
+      font-weight: 900;
+      margin-bottom: 40px;
+      max-width: 560px;
+    }
+
+    .who-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .who-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 18px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .gold-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .not-for {
+      margin-top: 40px;
+      padding: 24px 28px;
+      background: rgba(0,0,0,0.04);
+      border-radius: 8px;
+    }
+
+    .not-for p { font-size: 15px; color: #666; line-height: 1.65; }
+    .not-for strong { color: #444; }
+
+    /* =========================================================
+       PREÇO — dark
+    ========================================================= */
+    .pricing {
+      background: var(--charcoal);
+      text-align: center;
+    }
+
+    .pricing .label { opacity: 0.75; }
+
+    .pricing h2 {
+      font-size: 34px;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .pricing-sub {
+      font-size: 16px;
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 52px;
+    }
+
+    .price-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 44px 36px;
+      max-width: 440px;
+      margin: 0 auto;
+      text-align: left;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.35);
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--charcoal);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 3px;
+      margin-bottom: 24px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .currency {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 76px;
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .original {
+      font-size: 14px;
+      color: #aaa;
+      text-decoration: line-through;
+      margin-bottom: 30px;
+    }
+
+    .price-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .price-items li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .check { color: var(--gold); flex-shrink: 0; }
+
+    .guarantee {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      font-size: 12px;
+      color: #999;
+    }
+
+    /* =========================================================
+       FAQ — white
+    ========================================================= */
+    .faq { background: var(--white); }
+
+    .faq h2 {
+      font-size: 34px;
+      font-weight: 900;
+      margin-bottom: 40px;
+    }
+
+    .faq-list { display: flex; flex-direction: column; }
+
+    .faq-item { border-bottom: 1px solid var(--border); }
+
+    .faq-q {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 20px 0;
+      text-align: left;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .faq-q:hover { color: var(--gold); }
+
+    .faq-chevron {
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+      color: var(--gold);
+    }
+
+    .faq-item.open .faq-chevron { transform: rotate(45deg); }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .faq-item.open .faq-a { max-height: 220px; }
+
+    .faq-a p {
+      padding: 0 0 22px;
+      font-size: 15px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .final-cta {
+      text-align: center;
+      margin-top: 80px;
+      padding-top: 64px;
+      border-top: 1px solid var(--border);
+    }
+
+    .final-cta h3 {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .final-cta p {
+      font-size: 15px;
+      color: var(--text-light);
+      margin-bottom: 36px;
+    }
+
+    /* =========================================================
+       FOOTER
+    ========================================================= */
+    .site-footer {
+      background: var(--charcoal);
+      padding: 36px 0;
+      text-align: center;
+    }
+
+    .site-footer p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .site-footer a {
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+    }
+
+    /* =========================================================
+       DESKTOP
+    ========================================================= */
+    @media (min-width: 768px) {
+      .hero { padding: 108px 0 116px; }
+
+      .hero-inner {
+        flex-direction: row;
+        align-items: center;
+        gap: 72px;
+      }
+
+      .hero-text { flex: 1; }
+      .hero h1 { font-size: 54px; }
+      .hero-sub { font-size: 18px; }
+
+      .video-wrap { flex-shrink: 0; width: auto; }
+      .video-box { max-width: 248px; margin: 0; }
+
+      section { padding: 108px 0; }
+
+      .problem h2,
+      .transformation h2,
+      .how h2,
+      .includes h2,
+      .for-who h2,
+      .pricing h2,
+      .faq h2 { font-size: 42px; }
+
+      .tcard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .who-grid { grid-template-columns: 1fr 1fr 1fr; }
+
+      .step:not(:last-child) .step-num { margin-left: -58px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+
+      <div class="hero-text">
+        <span class="eyebrow">Sistema Claude Code</span>
+        <h1>Para de mandar orçamento.<br><em>Começa a mandar proposta que fecha.</em></h1>
+        <p class="hero-sub">Um sistema completo para o Claude Code gerar propostas comerciais como páginas web — com design de agência, copy persuasiva e identidade do seu negócio. O cliente abre no celular e vê um site profissional.</p>
+        <a href="#LINK_HOTMART" class="btn">Quero o sistema — R$97</a>
+        <span class="hero-hint">Lançamento R$97 · Depois R$197 · Acesso vitalício</span>
+      </div>
+
+      <div class="video-wrap">
+        <div class="video-box">
+          <div class="video-ratio">
+            <!-- IMPORTANTE: substitua YOUTUBE_VIDEO_ID pelo ID real do seu vídeo no YouTube -->
+            <div id="yt-player"></div>
+            <div class="video-overlay" id="video-overlay">
+              <div class="play-circle">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--charcoal)">
+                  <polygon points="6,3 20,12 6,21"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="progress-track" id="progress-track">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     PROBLEMA
+===================================================== -->
+<section class="problem">
+  <div class="container">
+    <span class="label reveal">O problema</span>
+    <h2 class="reveal">Você gasta horas numa proposta que o cliente nem lê até o preço</h2>
+
+    <div class="pain-list">
+
+      <div class="pain reveal d1">
+        <svg class="pain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <p><strong>Você passa 2, 3, 4 horas</strong> ajustando layout no Canva ou Word, tentando fazer parecer profissional. O cliente lê em 90 segundos e responde "vou pensar".</p>
+      </div>
+
+      <div class="pain reveal d2">
+        <svg class="pain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <p><strong>O cliente sumiu.</strong> Não foi necessariamente o preço — foi a primeira impressão. Proposta que parece igual às outras comunica que o trabalho vai ser igual também.</p>
+      </div>
+
+      <div class="pain reveal d3">
+        <svg class="pain-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+        <p><strong>Proposta fraca desvaloriza o seu trabalho antes da conversa acontecer.</strong> O cliente chega na negociação achando que pode pedir desconto — porque o que ele recebeu não transmitia o nível do que você entrega.</p>
+      </div>
+
+    </div>
+
+    <div class="callout reveal">
+      <p>O cliente decide se vai contratar você <strong>antes de ler o preço</strong>. Nos primeiros segundos de impressão visual. Uma proposta que parece site profissional já está vendendo enquanto ele rola a tela.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     TRANSFORMAÇÃO
+===================================================== -->
+<section class="transformation">
+  <div class="container">
+    <span class="label reveal">O que muda</span>
+    <h2 class="reveal">Sua proposta vira a parte mais impressionante do processo de venda</h2>
+
+    <div class="tcard-grid">
+
+      <div class="tcard reveal d1">
+        <h3>O cliente abre um link, não um arquivo</h3>
+        <p>Você envia um link. Ele abre no celular como um site — animações, tipografia cuidada, design que parece agência. Não um PDF que precisa baixar e pinçar na tela.</p>
+      </div>
+
+      <div class="tcard reveal d2">
+        <h3>A proposta já argumenta por você</h3>
+        <p>Antes de chegar no preço, o cliente passou pelo problema dele, pela transformação, pelos entregáveis, pela prova. O preço aparece quando o valor já foi construído — parece óbvio, não caro.</p>
+      </div>
+
+      <div class="tcard reveal d3">
+        <h3>Cada proposta gerada do zero</h3>
+        <p>Não existe "colar nome no template". O sistema entende o projeto e gera texto, estrutura e design específicos para aquele cliente. Cada proposta sai diferente porque cada cliente é diferente.</p>
+      </div>
+
+      <div class="tcard reveal d4">
+        <h3>Você cobra mais com mais naturalidade</h3>
+        <p>Quando a entrega visual já é premium desde a proposta, o cliente associa qualidade antes de ver o trabalho. Cobrar o preço que você merece fica mais fácil quando tudo comunica profissionalismo.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     COMO FUNCIONA
+===================================================== -->
+<section class="how">
+  <div class="container">
+    <span class="label reveal">Como funciona</span>
+    <h2 class="reveal">Três passos. Sem código. Sem template.</h2>
+
+    <div class="steps">
+
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h3>Abre o Claude Code na pasta do sistema</h3>
+          <p>Você instala o Claude Code uma vez — é gratuito. Faz o download do sistema, extrai a pasta e abre com um comando. O vídeo de instalação mostra tudo em menos de 10 minutos.</p>
+        </div>
+      </div>
+
+      <div class="step reveal d1">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h3>Digita /proposta e responde as perguntas</h3>
+          <p>O agente conduz uma conversa — pergunta sobre o cliente, o projeto, o investimento, o prazo, as cores do seu negócio. Você só responde. Opcional: coloca logos e qualquer contexto na pasta antes de começar.</p>
+        </div>
+      </div>
+
+      <div class="step reveal d2">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h3>O sistema gera, você envia</h3>
+          <p>A proposta abre sozinha no navegador. Você revisa, aprova, e envia o arquivo pelo WhatsApp — ou publica como link no GitHub Pages em segundos, de graça. O cliente abre no celular como um site.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     INCLUI
+===================================================== -->
+<section class="includes">
+  <div class="container">
+    <span class="label reveal">O que está incluído</span>
+    <h2 class="reveal">Tudo que o sistema precisa para funcionar</h2>
+
+    <div class="include-list">
+
+      <div class="inc reveal">
+        <svg class="inc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+        <div class="inc-text">
+          <h4>CLAUDE.md — o cérebro do sistema</h4>
+          <p>Lido automaticamente pelo Claude Code toda vez que você abre a pasta. Define a filosofia, os padrões de qualidade e o que separa proposta que fecha de proposta que não fecha.</p>
+        </div>
+      </div>
+
+      <div class="inc reveal d1">
+        <svg class="inc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <div class="inc-text">
+          <h4>6 skills especializadas</h4>
+          <p>Copywriting persuasiva · Humanização (texto que não soa IA) · Estrutura de proposta · Gatilhos de conversão (Cialdini aplicado) · UI/UX · Design visual. O agente lê cada uma na hora certa.</p>
+        </div>
+      </div>
+
+      <div class="inc reveal d2">
+        <svg class="inc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="4 17 10 11 4 5"/>
+          <line x1="12" y1="19" x2="20" y2="19"/>
+        </svg>
+        <div class="inc-text">
+          <h4>Comando /proposta — o agente completo</h4>
+          <p>Conduz a conversa, faz as perguntas certas na ordem certa, coleta o contexto e gera o HTML do zero. Não usa template — pensa especificamente para aquele cliente e aquele projeto.</p>
+        </div>
+      </div>
+
+      <div class="inc reveal d3">
+        <svg class="inc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="10 8 16 12 10 16 10 8"/>
+        </svg>
+        <div class="inc-text">
+          <h4>Vídeo de instalação completo</h4>
+          <p>Do zero ao funcionando em menos de 10 minutos. Mostra exatamente o que instalar e onde colocar cada arquivo, sem jargão.</p>
+        </div>
+      </div>
+
+      <div class="inc reveal d4">
+        <svg class="inc-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+          <polyline points="17 6 23 6 23 12"/>
+        </svg>
+        <div class="inc-text">
+          <h4>Acesso vitalício + todas as atualizações</h4>
+          <p>Você compra uma vez. Quando o sistema for atualizado, você baixa a versão nova pelo mesmo link de entrega, sem custo adicional.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     PARA QUEM
+===================================================== -->
+<section class="for-who">
+  <div class="container">
+    <span class="label reveal">Para quem é</span>
+    <h2 class="reveal">Qualquer profissional que manda proposta e quer fechar mais</h2>
+
+    <div class="who-grid">
+      <div class="who-item reveal"><div class="gold-dot"></div>Designers e agências criativas</div>
+      <div class="who-item reveal d1"><div class="gold-dot"></div>Consultores e estrategistas</div>
+      <div class="who-item reveal d2"><div class="gold-dot"></div>Fotógrafos e videomakers</div>
+      <div class="who-item reveal d1"><div class="gold-dot"></div>Arquitetos e projetistas</div>
+      <div class="who-item reveal d2"><div class="gold-dot"></div>Gestores de tráfego</div>
+      <div class="who-item reveal d3"><div class="gold-dot"></div>Devs e tech freelancers</div>
+    </div>
+
+    <div class="not-for reveal">
+      <p><strong>Não é para quem quer só velocidade.</strong> O sistema gera rápido — mas o que muda não é só o tempo. É o nível de percepção que o cliente tem de você antes da primeira reunião. Se você quer só um template mais ágil, isso vai além disso.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     PREÇO
+===================================================== -->
+<section class="pricing">
+  <div class="container">
+    <span class="label reveal">Investimento</span>
+    <h2 class="reveal">Uma vez. Para sempre.</h2>
+    <p class="pricing-sub reveal">Sem mensalidade. Sem renovação. Sem surpresa.</p>
+
+    <div class="price-card reveal">
+      <span class="badge">Lançamento</span>
+
+      <div class="price-row">
+        <span class="currency">R$</span>
+        <span class="amount">97</span>
+      </div>
+      <p class="original">De R$197</p>
+
+      <ul class="price-items">
+        <li>
+          <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M20 6L9 17L4 12"/>
+          </svg>
+          CLAUDE.md + 6 skills especializadas
+        </li>
+        <li>
+          <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M20 6L9 17L4 12"/>
+          </svg>
+          Comando /proposta — o agente completo
+        </li>
+        <li>
+          <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M20 6L9 17L4 12"/>
+          </svg>
+          Vídeo de instalação passo a passo
+        </li>
+        <li>
+          <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M20 6L9 17L4 12"/>
+          </svg>
+          Acesso vitalício + atualizações futuras
+        </li>
+        <li>
+          <svg class="check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <path d="M20 6L9 17L4 12"/>
+          </svg>
+          Entrega imediata via download
+        </li>
+      </ul>
+
+      <!-- LINK_HOTMART: substitua pelo link real da oferta no Hotmart/Kiwify -->
+      <a href="#LINK_HOTMART" class="btn btn-lg btn-block">Comprar agora — R$97</a>
+
+      <div class="guarantee">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        Garantia de 7 dias pelo Hotmart. Se não gostar, 100% do dinheiro de volta.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================
+     FAQ
+===================================================== -->
+<section class="faq">
+  <div class="container">
+    <span class="label reveal">Dúvidas frequentes</span>
+    <h2 class="reveal">Antes de comprar</h2>
+
+    <div class="faq-list reveal">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Precisa saber programar para usar?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+        <div class="faq-a">
+          <p>Não. Se você sabe instalar um aplicativo e seguir um vídeo de tutorial, você configura. O vídeo de instalação vai do zero ao funcionando em menos de 10 minutos.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Funciona no Mac e no Windows?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+        <div class="faq-a">
+          <p>Nos dois. O Claude Code roda em Mac, Windows e Linux.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Precisa pagar assinatura além do produto?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+        <div class="faq-a">
+          <p>O Claude Code é gratuito. Para usá-lo você precisa de uma conta no Claude — o plano Pro custa $20/mês. Se você já usa Claude, não tem custo extra. O sistema em si é comprado uma vez só.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Qual a diferença de um template de proposta?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+        <div class="faq-a">
+          <p>Template é fixo. Você adapta o projeto ao template — e o resultado parece template. Esse sistema entende o projeto e gera a proposta do zero: estrutura, texto e design pensados para aquele cliente específico. Cada proposta sai diferente porque cada cliente é diferente.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Vou receber as atualizações do sistema?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+        <div class="faq-a">
+          <p>Sim. Você compra uma vez e tem acesso vitalício. Quando o sistema for atualizado, você baixa a versão nova pelo mesmo link de entrega, sem pagar nada a mais.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Posso testar e pedir reembolso se não gostar?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+        <div class="faq-a">
+          <p>Sim. Garantia de 7 dias pelo Hotmart, sem perguntas. Você instala, testa, e se não estiver satisfeito, solicita o reembolso direto pela plataforma.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA final -->
+    <div class="final-cta reveal">
+      <h3>Pronto para mandar a próxima proposta de outra forma?</h3>
+      <p>Preço de lançamento por R$97 enquanto durar.</p>
+      <a href="#LINK_HOTMART" class="btn btn-lg">Quero o sistema agora</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+<footer class="site-footer">
+  <div class="container">
+    <p>Proposta Fechada &middot; <a href="#">Termos de uso</a> &middot; <a href="#">Contato</a></p>
+  </div>
+</footer>
+
+<!-- =====================================================
+     SCRIPTS
+===================================================== -->
+<script>
+  // --- Intersection Observer ---
+  const io = new IntersectionObserver(
+    entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')),
+    { threshold: 0.12 }
+  );
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // --- FAQ ---
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // --- YouTube Player + Barra de progresso estratégica ---
+  // Troque YOUTUBE_VIDEO_ID pelo ID real (ex: 'dQw4w9WgXcQ')
+  const VIDEO_ID = 'YOUTUBE_VIDEO_ID';
+
+  // Mapeamento: progresso real (0-1) → progresso visual (0-1)
+  // Estratégia: barra corre rápido no início (retém quem está prestes a sair)
+  //             e desacelera no final (cria FOMO para quem já está quase no fim)
+  function realToVisual(r) {
+    if (r <= 0.30) return (r / 0.30) * 0.52;
+    if (r <= 0.70) return 0.52 + ((r - 0.30) / 0.40) * 0.28;
+    return 0.80 + ((r - 0.70) / 0.30) * 0.20;
+  }
+
+  let player, ticker;
+
+  window.onYouTubeIframeAPIReady = function () {
+    player = new YT.Player('yt-player', {
+      videoId: VIDEO_ID,
+      playerVars: { controls: 0, modestbranding: 1, playsinline: 1, rel: 0, fs: 0 },
+      events: {
+        onReady: () => {
+          document.getElementById('video-overlay').addEventListener('click', () => player.playVideo());
+        },
+        onStateChange: e => {
+          const overlay = document.getElementById('video-overlay');
+          if (e.data === YT.PlayerState.PLAYING) {
+            overlay.classList.add('playing');
+            ticker = setInterval(tick, 400);
+          } else {
+            overlay.classList.remove('playing');
+            clearInterval(ticker);
+            if (e.data === YT.PlayerState.ENDED) {
+              document.getElementById('progress-fill').style.width = '100%';
+            }
+          }
+        }
+      }
+    });
+  };
+
+  function tick() {
+    if (!player || !player.getDuration) return;
+    const dur = player.getDuration();
+    const cur = player.getCurrentTime();
+    if (!dur) return;
+    const pct = realToVisual(cur / dur) * 100;
+    document.getElementById('progress-fill').style.width = pct.toFixed(1) + '%';
+  }
+</script>
+<script src="https://www.youtube.com/iframe_api" async></script>
+
+</body>
+</html>
