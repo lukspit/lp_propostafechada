@@ -370,24 +370,15 @@
     .step {
       display: flex;
       gap: 24px;
-      align-items: flex-start;
-      padding: 0 0 36px;
+      align-items: stretch;
     }
 
-    .step:not(:last-child) {
-      border-left: 1px solid rgba(201,168,76,0.2);
-      margin-left: 26px;
-      padding-left: 32px;
-      position: relative;
-    }
-
-    .step:not(:last-child)::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -1px;
-      width: 1px;
-      height: 100%;
-      background: linear-gradient(to bottom, rgba(201,168,76,0.35), rgba(201,168,76,0));
+    .step-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      width: 52px;
     }
 
     .step-num {
@@ -397,15 +388,26 @@
       color: var(--gold);
       line-height: 1;
       flex-shrink: 0;
-      width: 48px;
-      position: relative;
+      width: 52px;
+      text-align: center;
     }
 
-    .step:not(:last-child) .step-num {
-      margin-left: -56px;
+    .step-connector {
+      flex: 1;
+      width: 1px;
+      min-height: 40px;
+      background: linear-gradient(to bottom, rgba(201,168,76,0.45), rgba(201,168,76,0.05));
+      margin: 8px auto 0;
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.55s ease 0.2s;
     }
 
-    .step-body { padding-top: 4px; }
+    .step-connector.visible { transform: scaleY(1); }
+
+    .step-body { padding-top: 4px; padding-bottom: 52px; }
+
+    .step:last-child .step-body { padding-bottom: 0; }
 
     .step-body h3 {
       font-family: 'DM Sans', sans-serif;
@@ -731,13 +733,13 @@
     }
 
     .header-cta {
-      display: none;
+      display: inline-block;
       background: var(--gold);
       color: var(--charcoal);
       font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 10px 20px;
+      padding: 8px 12px;
       border-radius: 4px;
       text-decoration: none;
       white-space: nowrap;
@@ -747,7 +749,7 @@
 
     .header-cta:hover { background: var(--gold-light); }
 
-    @media (min-width: 480px) { .header-cta { display: inline-block; } }
+    @media (min-width: 480px) { .header-cta { font-size: 13px; padding: 10px 20px; } }
 
     /* =========================================================
        FOOTER
@@ -805,7 +807,6 @@
 
       .who-grid { grid-template-columns: 1fr 1fr 1fr; }
 
-      .step:not(:last-child) .step-num { margin-left: -58px; }
     }
   </style>
 </head>
@@ -834,7 +835,7 @@
       <div class="hero-text">
         <span class="eyebrow">Sistema Claude Code</span>
         <h1>Para de mandar orçamento.<br><em>Começa a mandar proposta que fecha.</em></h1>
-        <p class="hero-sub">Um sistema completo para o Claude Code gerar propostas comerciais como páginas web — com design de agência, copy persuasiva e identidade do seu negócio. O cliente abre no celular e vê um site profissional.</p>
+        <p class="hero-sub">Um sistema completo para o Claude Code gerar propostas comerciais com design de agência, copy persuasiva e identidade do seu negócio. O cliente abre no celular e vê um site profissional (como esse que você está vendo).</p>
         <a href="#LINK_HOTMART" class="btn">Quero o sistema — R$97</a>
         <span class="hero-hint">Lançamento R$97 · Depois R$197 · Acesso vitalício</span>
       </div>
@@ -948,7 +949,10 @@
     <div class="steps">
 
       <div class="step reveal">
-        <div class="step-num">1</div>
+        <div class="step-left">
+          <div class="step-num">1</div>
+          <div class="step-connector"></div>
+        </div>
         <div class="step-body">
           <h3>Abre o Claude Code na pasta do sistema</h3>
           <p>Você faz o download do sistema, extrai a pasta e abre no Claude Code com um comando. O vídeo de instalação mostra tudo em menos de 10 minutos.</p>
@@ -956,7 +960,10 @@
       </div>
 
       <div class="step reveal d1">
-        <div class="step-num">2</div>
+        <div class="step-left">
+          <div class="step-num">2</div>
+          <div class="step-connector"></div>
+        </div>
         <div class="step-body">
           <h3>Digita /proposta e responde as perguntas</h3>
           <p>O agente conduz uma conversa — pergunta sobre o cliente, o projeto, o investimento, o prazo, as cores do seu negócio. Você só responde. Opcional: coloca logos e qualquer contexto na pasta antes de começar.</p>
@@ -964,7 +971,9 @@
       </div>
 
       <div class="step reveal d2">
-        <div class="step-num">3</div>
+        <div class="step-left">
+          <div class="step-num">3</div>
+        </div>
         <div class="step-body">
           <h3>O sistema gera, você envia</h3>
           <p>A proposta abre sozinha no navegador. Você revisa, aprova, e publica como link no GitHub Pages em segundos — de graça. O cliente recebe o link e abre no celular como um site.</p>
@@ -1253,7 +1262,7 @@
     entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('visible')),
     { threshold: 0.12 }
   );
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  document.querySelectorAll('.reveal, .step-connector').forEach(el => io.observe(el));
 
   // --- FAQ ---
   function toggleFaq(btn) {
