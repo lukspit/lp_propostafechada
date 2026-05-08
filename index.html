@@ -1273,12 +1273,8 @@
   }
 
   // --- YouTube Player + Barra de progresso estratégica ---
-  // Troque YOUTUBE_VIDEO_ID pelo ID real (ex: 'dQw4w9WgXcQ')
-  const VIDEO_ID = 'YOUTUBE_VIDEO_ID';
+  const VIDEO_ID = 'P9uErp9ijDc';
 
-  // Mapeamento: progresso real (0-1) → progresso visual (0-1)
-  // Estratégia: barra corre rápido no início (retém quem está prestes a sair)
-  //             e desacelera no final (cria FOMO para quem já está quase no fim)
   function realToVisual(r) {
     if (r <= 0.30) return (r / 0.30) * 0.52;
     if (r <= 0.70) return 0.52 + ((r - 0.30) / 0.40) * 0.28;
@@ -1290,10 +1286,19 @@
   window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player('yt-player', {
       videoId: VIDEO_ID,
-      playerVars: { controls: 0, modestbranding: 1, playsinline: 1, rel: 0, fs: 0 },
+      playerVars: { controls: 0, modestbranding: 1, playsinline: 1, rel: 0, fs: 0, mute: 1 },
       events: {
         onReady: () => {
-          document.getElementById('video-overlay').addEventListener('click', () => player.playVideo());
+          const overlay = document.getElementById('video-overlay');
+          overlay.addEventListener('click', () => {
+            player.unMute();
+            player.playVideo();
+          });
+          // Autoplay mudo após 7 segundos
+          setTimeout(() => {
+            player.playVideo();
+            overlay.classList.add('playing');
+          }, 7000);
         },
         onStateChange: e => {
           const overlay = document.getElementById('video-overlay');
