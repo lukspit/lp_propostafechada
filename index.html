@@ -1286,19 +1286,10 @@
   window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player('yt-player', {
       videoId: VIDEO_ID,
-      playerVars: { controls: 0, modestbranding: 1, playsinline: 1, rel: 0, fs: 0, mute: 1 },
+      playerVars: { controls: 0, modestbranding: 1, playsinline: 1, rel: 0, fs: 0 },
       events: {
         onReady: () => {
-          const overlay = document.getElementById('video-overlay');
-          overlay.addEventListener('click', () => {
-            player.unMute();
-            player.playVideo();
-          });
-          // Autoplay mudo após 7 segundos
-          setTimeout(() => {
-            player.playVideo();
-            overlay.classList.add('playing');
-          }, 7000);
+          document.getElementById('video-overlay').addEventListener('click', () => player.playVideo());
         },
         onStateChange: e => {
           const overlay = document.getElementById('video-overlay');
