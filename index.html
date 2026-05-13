@@ -185,7 +185,7 @@
 
     .video-box {
       width: 100%;
-      max-width: 290px;
+      max-width: 100%;
       margin: 0 auto;
       border-radius: 10px;
       overflow: hidden;
@@ -196,7 +196,7 @@
     .video-ratio {
       position: relative;
       width: 100%;
-      padding-top: 177.78%; /* 9:16 */
+      padding-top: 56.25%; /* 16:9 */
     }
 
     #yt-player {
@@ -824,20 +824,14 @@
        DESKTOP
     ========================================================= */
     @media (min-width: 768px) {
-      .hero { padding: 108px 0 116px; }
+      .hero { padding: 108px 0 96px; }
 
-      .hero-inner {
-        flex-direction: row;
-        align-items: center;
-        gap: 72px;
-      }
+      .hero-inner { gap: 56px; }
 
-      .hero-text { flex: 1; }
       .hero h1 { font-size: 54px; }
       .hero-sub { font-size: 18px; }
 
-      .video-wrap { flex-shrink: 0; width: auto; }
-      .video-box { max-width: 248px; margin: 0; }
+      .video-box { max-width: 760px; margin: 0; }
 
       section { padding: 108px 0; }
 
@@ -1340,7 +1334,7 @@
   }
 
   // --- YouTube Player + Barra de progresso estratégica ---
-  const VIDEO_ID = 'P9uErp9ijDc';
+  const VIDEO_ID = 'rkXKsSuc9Hw';
 
   function realToVisual(r) {
     if (r <= 0.30) return (r / 0.30) * 0.52;
