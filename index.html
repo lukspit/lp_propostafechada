@@ -206,79 +206,6 @@
       border: none;
     }
 
-    .video-overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.22);
-      cursor: pointer;
-      transition: background 0.2s;
-      z-index: 3;
-    }
-
-    .video-box.playing .video-overlay { opacity: 0; pointer-events: none; }
-
-    .fullscreen-btn {
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      width: 38px;
-      height: 38px;
-      background: rgba(0,0,0,0.55);
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255,255,255,0.9);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease, background 0.18s ease, color 0.18s ease;
-      z-index: 4;
-      padding: 0;
-    }
-
-    .video-box.playing .fullscreen-btn,
-    .video-box:hover .fullscreen-btn {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .fullscreen-btn:hover {
-      background: rgba(0,0,0,0.78);
-      color: var(--gold);
-    }
-
-    .play-circle {
-      width: 60px;
-      height: 60px;
-      background: var(--gold);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s ease;
-    }
-
-    .video-overlay:hover .play-circle { transform: scale(1.1); }
-
-    .progress-track {
-      height: 3px;
-      background: rgba(255,255,255,0.1);
-      cursor: pointer;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--gold);
-      transition: width 0.45s linear;
-    }
-
     /* =========================================================
        SEÇÃO — base
     ========================================================= */
@@ -922,26 +849,7 @@
       <div class="video-wrap">
         <div class="video-box">
           <div class="video-ratio">
-            <!-- IMPORTANTE: substitua YOUTUBE_VIDEO_ID pelo ID real do seu vídeo no YouTube -->
             <div id="yt-player"></div>
-            <div class="video-overlay" id="video-overlay">
-              <div class="play-circle">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--charcoal)">
-                  <polygon points="6,3 20,12 6,21"/>
-                </svg>
-              </div>
-            </div>
-            <button class="fullscreen-btn" id="fullscreen-btn" type="button" aria-label="Tela cheia">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 9V4h5"/>
-                <path d="M20 9V4h-5"/>
-                <path d="M4 15v5h5"/>
-                <path d="M20 15v5h-5"/>
-              </svg>
-            </button>
-          </div>
-          <div class="progress-track" id="progress-track">
-            <div class="progress-fill" id="progress-fill"></div>
           </div>
         </div>
       </div>
@@ -1373,61 +1281,15 @@
     if (!isOpen) item.classList.add('open');
   }
 
-  // --- YouTube Player + Barra de progresso estratégica ---
+  // --- YouTube Player (controles nativos) ---
   const VIDEO_ID = 'YxaZz27jaLs';
 
-  function realToVisual(r) {
-    if (r <= 0.30) return (r / 0.30) * 0.52;
-    if (r <= 0.70) return 0.52 + ((r - 0.30) / 0.40) * 0.28;
-    return 0.80 + ((r - 0.70) / 0.30) * 0.20;
-  }
-
-  let player, ticker;
-
   window.onYouTubeIframeAPIReady = function () {
-    player = new YT.Player('yt-player', {
+    new YT.Player('yt-player', {
       videoId: VIDEO_ID,
-      playerVars: { controls: 0, modestbranding: 1, playsinline: 1, rel: 0, fs: 0, iv_load_policy: 3, disablekb: 1 },
-      events: {
-        onReady: () => {
-          document.getElementById('video-overlay').addEventListener('click', () => player.playVideo());
-        },
-        onStateChange: e => {
-          const videoBox = document.querySelector('.video-box');
-          if (e.data === YT.PlayerState.PLAYING) {
-            videoBox.classList.add('playing');
-            ticker = setInterval(tick, 400);
-          } else {
-            videoBox.classList.remove('playing');
-            clearInterval(ticker);
-            if (e.data === YT.PlayerState.ENDED) {
-              document.getElementById('progress-fill').style.width = '100%';
-            }
-          }
-        }
-      }
+      playerVars: { modestbranding: 1, playsinline: 1, rel: 0, iv_load_policy: 3 }
     });
   };
-
-  // --- Fullscreen customizado ---
-  document.getElementById('fullscreen-btn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const box = document.querySelector('.video-box');
-    if (!document.fullscreenElement) {
-      (box.requestFullscreen || box.webkitRequestFullscreen || box.msRequestFullscreen).call(box);
-    } else {
-      (document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen).call(document);
-    }
-  });
-
-  function tick() {
-    if (!player || !player.getDuration) return;
-    const dur = player.getDuration();
-    const cur = player.getCurrentTime();
-    if (!dur) return;
-    const pct = realToVisual(cur / dur) * 100;
-    document.getElementById('progress-fill').style.width = pct.toFixed(1) + '%';
-  }
 </script>
 <script src="https://www.youtube.com/iframe_api" async></script>
 
