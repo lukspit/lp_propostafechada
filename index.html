@@ -219,7 +219,39 @@
       z-index: 3;
     }
 
-    .video-overlay.playing { opacity: 0; pointer-events: none; }
+    .video-box.playing .video-overlay { opacity: 0; pointer-events: none; }
+
+    .fullscreen-btn {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      width: 38px;
+      height: 38px;
+      background: rgba(0,0,0,0.55);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.9);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, background 0.18s ease, color 0.18s ease;
+      z-index: 4;
+      padding: 0;
+    }
+
+    .video-box.playing .fullscreen-btn,
+    .video-box:hover .fullscreen-btn {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .fullscreen-btn:hover {
+      background: rgba(0,0,0,0.78);
+      color: var(--gold);
+    }
 
     .play-circle {
       width: 60px;
@@ -899,6 +931,14 @@
                 </svg>
               </div>
             </div>
+            <button class="fullscreen-btn" id="fullscreen-btn" type="button" aria-label="Tela cheia">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 9V4h5"/>
+                <path d="M20 9V4h-5"/>
+                <path d="M4 15v5h5"/>
+                <path d="M20 15v5h-5"/>
+              </svg>
+            </button>
           </div>
           <div class="progress-track" id="progress-track">
             <div class="progress-fill" id="progress-fill"></div>
@@ -1334,7 +1374,7 @@
   }
 
   // --- YouTube Player + Barra de progresso estratégica ---
-  const VIDEO_ID = 'rkXKsSuc9Hw';
+  const VIDEO_ID = 'YxaZz27jaLs';
 
   function realToVisual(r) {
     if (r <= 0.30) return (r / 0.30) * 0.52;
@@ -1347,18 +1387,18 @@
   window.onYouTubeIframeAPIReady = function () {
     player = new YT.Player('yt-player', {
       videoId: VIDEO_ID,
-      playerVars: { controls: 0, modestbranding: 1, playsinline: 1, rel: 0, fs: 0 },
+      playerVars: { controls: 0, modestbranding: 1, playsinline: 1, rel: 0, fs: 0, iv_load_policy: 3, disablekb: 1 },
       events: {
         onReady: () => {
           document.getElementById('video-overlay').addEventListener('click', () => player.playVideo());
         },
         onStateChange: e => {
-          const overlay = document.getElementById('video-overlay');
+          const videoBox = document.querySelector('.video-box');
           if (e.data === YT.PlayerState.PLAYING) {
-            overlay.classList.add('playing');
+            videoBox.classList.add('playing');
             ticker = setInterval(tick, 400);
           } else {
-            overlay.classList.remove('playing');
+            videoBox.classList.remove('playing');
             clearInterval(ticker);
             if (e.data === YT.PlayerState.ENDED) {
               document.getElementById('progress-fill').style.width = '100%';
@@ -1368,6 +1408,17 @@
       }
     });
   };
+
+  // --- Fullscreen customizado ---
+  document.getElementById('fullscreen-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    const box = document.querySelector('.video-box');
+    if (!document.fullscreenElement) {
+      (box.requestFullscreen || box.webkitRequestFullscreen || box.msRequestFullscreen).call(box);
+    } else {
+      (document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen).call(document);
+    }
+  });
 
   function tick() {
     if (!player || !player.getDuration) return;
