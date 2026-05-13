@@ -206,6 +206,42 @@
       border: none;
     }
 
+    .video-overlay {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--charcoal);
+      background-image: radial-gradient(ellipse at center, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0) 70%);
+      cursor: pointer;
+      transition: opacity 0.35s ease;
+      z-index: 3;
+    }
+
+    .video-box.playing .video-overlay {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .play-circle {
+      width: 76px;
+      height: 76px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 12px 32px rgba(201,168,76,0.35);
+    }
+
+    .video-overlay:hover .play-circle {
+      transform: scale(1.08);
+      box-shadow: 0 16px 40px rgba(201,168,76,0.5);
+    }
+
     /* =========================================================
        SEÇÃO — base
     ========================================================= */
@@ -850,6 +886,13 @@
         <div class="video-box">
           <div class="video-ratio">
             <div id="yt-player"></div>
+            <div class="video-overlay" id="video-overlay">
+              <div class="play-circle">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--charcoal)">
+                  <polygon points="6,3 20,12 6,21"/>
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1281,13 +1324,22 @@
     if (!isOpen) item.classList.add('open');
   }
 
-  // --- YouTube Player (controles nativos) ---
+  // --- YouTube Player com overlay de play customizado ---
   const VIDEO_ID = 'YxaZz27jaLs';
+  let player;
 
   window.onYouTubeIframeAPIReady = function () {
-    new YT.Player('yt-player', {
+    player = new YT.Player('yt-player', {
       videoId: VIDEO_ID,
-      playerVars: { modestbranding: 1, playsinline: 1, rel: 0, iv_load_policy: 3 }
+      playerVars: { modestbranding: 1, playsinline: 1, rel: 0, iv_load_policy: 3 },
+      events: {
+        onReady: () => {
+          document.getElementById('video-overlay').addEventListener('click', () => {
+            document.querySelector('.video-box').classList.add('playing');
+            player.playVideo();
+          });
+        }
+      }
     });
   };
 </script>
